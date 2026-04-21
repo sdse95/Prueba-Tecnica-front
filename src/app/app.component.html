@@ -1,0 +1,21 @@
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog [style]="{ width: '26rem' }"></p-confirmDialog>
+
+<div class="shell">
+  <header class="shell__header">
+    <span class="shell__brand">Patients App</span>
+    <p-menubar *ngIf="isAuthenticated$ | async" [model]="menuItems"></p-menubar>
+    <button
+      *ngIf="isAuthenticated$ | async"
+      pButton
+      type="button"
+      label="Cerrar sesión"
+      icon="pi pi-sign-out"
+      class="p-button-text"
+      (click)="logout()"
+    ></button>
+  </header>
+  <main class="shell__main">
+    <router-outlet></router-outlet>
+  </main>
+</div>

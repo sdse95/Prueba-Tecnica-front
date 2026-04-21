@@ -1,0 +1,51 @@
+<div class="page">
+  <div class="toolbar">
+    <button pButton type="button" icon="pi pi-arrow-left" class="p-button-text" label="Volver" (click)="back()"></button>
+    <div class="actions" *ngIf="patient">
+      <button pButton type="button" label="Editar" icon="pi pi-pencil" (click)="edit()"></button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+  </div>
+
+  <p-card *ngIf="!loading && patient" header="Datos del paciente">
+    <dl class="detail-grid">
+      <dt>ID</dt>
+      <dd>{{ patient.patientId }}</dd>
+      <dt>Documento</dt>
+      <dd>{{ patient.documentType }} {{ patient.documentNumber }}</dd>
+      <dt>Nombre</dt>
+      <dd>{{ patient.firstName }}</dd>
+      <dt>Apellidos</dt>
+      <dd>{{ patient.lastName }}</dd>
+      <dt>Fecha de nacimiento</dt>
+      <dd>{{ patient.birthDate | date : 'mediumDate' }}</dd>
+      <dt>Teléfono</dt>
+      <dd>{{ patient.phoneNumber ?? '—' }}</dd>
+      <dt>Email</dt>
+      <dd>{{ patient.email ?? '—' }}</dd>
+      <dt>Fecha de creación</dt>
+      <dd>{{ patient.createdAt | date : 'short' }}</dd>
+    </dl>
+  </p-card>
+
+  <p-card *ngIf="!loading && patient" header="Citas asociadas" styleClass="mt-3">
+    <p class="hint">No hay endpoint de citas en el backend aún. Esta sección está preparada para mostrar citas en solo lectura.</p>
+    <p-table [value]="appointments" styleClass="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Fecha</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="3">Sin citas para mostrar.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

@@ -1,0 +1,174 @@
+<div class="page">
+  <div class="toolbar">
+    <h1>Pacientes</h1>
+    <div class="toolbar__actions">
+      <button
+        pButton
+        type="button"
+        label="Exportar por fecha…"
+        icon="pi pi-download"
+        class="p-button-outlined"
+        (click)="openExportDialog()"
+      ></button>
+      <button
+        *ngIf="canManagePatients"
+        pButton
+        type="button"
+        label="Nuevo paciente"
+        icon="pi pi-plus"
+        (click)="create()"
+      ></button>
+    </div>
+  </div>
+
+  <p-dialog
+    styleClass="export-dialog"
+    header="Exportar por fecha de creación"
+    [(visible)]="exportDialogVisible"
+    [modal]="true"
+    [style]="{ width: 'min(100vw - 2rem, 28rem)' }"
+    [draggable]="false"
+    [resizable]="false"
+    [dismissableMask]="true"
+  >
+    <p class="dialog__hint">
+      Se consultan pacientes con <strong>fecha de creación</strong> estrictamente posterior al inicio del día
+      seleccionado (según tu zona horaria). El resultado se descarga como Excel o CSV.
+    </p>
+    <div class="dialog__field">
+      <label for="exportFromDate">Fecha desde</label>
+      <p-calendar
+        inputId="exportFromDate"
+        [(ngModel)]="exportFromDate"
+        dateFormat="dd/mm/yy"
+        [showIcon]="true"
+        appendTo="body"
+        styleClass="w-full"
+      ></p-calendar>
+    </div>
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        class="export-dialog__cancel p-button-outlined p-button-danger"
+        [disabled]="exporting"
+        (click)="exportDialogVisible = false"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Exportar CSV"
+        icon="pi pi-file"
+        class="p-button-secondary"
+        [loading]="exporting"
+        [disabled]="exporting"
+        (click)="downloadCsv()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Exportar Excel"
+        icon="pi pi-file-excel"
+        [loading]="exporting"
+        [disabled]="exporting"
+        (click)="downloadExcel()"
+      ></button>
+    </ng-template>
+  </p-dialog>
+
+  <p-card>
+    <div class="filters">
+      <span class="p-float-label">
+        <input pInputText id="filterName" [(ngModel)]="filterName" (keyup.enter)="applyFilters()" />
+        <label for="filterName">Nombre (contiene)</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          pInputText
+          id="filterDocument"
+          [(ngModel)]="filterDocument"
+          (keyup.enter)="applyFilters()"
+        />
+        <label for="filterDocument">Nº documento (exacto)</label>
+      </span>
+      <button
+        pButton
+        type="button"
+        label="Buscar"
+        icon="pi pi-search"
+        class="p-button-secondary"
+        (click)="applyFilters()"
+      ></button>
+    </div>
+
+    <p-table
+      #dt
+      [value]="patients"
+      [lazy]="true"
+      (onLazyLoad)="onLazyLoad($event)"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalCount"
+      [loading]="loading"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{first} a {last} de {totalRecords} registros"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Documento</th>
+          <th>Nombre</th>
+          <th>Apellidos</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Fecha creación</th>
+          <th style="width: 12rem">Acciones</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-p>
+        <tr>
+          <td>{{ p.documentType }} {{ p.documentNumber }}</td>
+          <td>{{ p.firstName }}</td>
+          <td>{{ p.lastName }}</td>
+          <td>{{ p.email ?? '—' }}</td>
+          <td>{{ p.phoneNumber ?? '—' }}</td>
+          <td>{{ p.createdAt | date : 'short' }}</td>
+          <td>
+            <button
+              pButton
+              icon="pi pi-eye"
+              class="p-button-text p-button-sm"
+              pTooltip="Ver"
+              (click)="view(p.patientId)"
+            ></button>
+            <button
+              *ngIf="canManagePatients"
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-text p-button-sm"
+              pTooltip="Editar"
+              (click)="edit(p.patientId)"
+            ></button>
+            <button
+              *ngIf="canManagePatients"
+              pButton
+              icon="pi pi-trash"
+              class="p-button-text p-button-danger p-button-sm"
+              pTooltip="Eliminar"
+              [loading]="deletingId === p.patientId"
+              [disabled]="deletingId !== null"
+              (click)="confirmDelete(p)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7">No hay pacientes para mostrar.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>

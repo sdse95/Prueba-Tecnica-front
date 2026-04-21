@@ -1,0 +1,96 @@
+<div class="page">
+  <div class="toolbar">
+    <h1>{{ mode === 'create' ? 'Nuevo paciente' : 'Editar paciente' }}</h1>
+  </div>
+
+  <p-card>
+    <div *ngIf="loading" class="loading">
+      <p-progressSpinner strokeWidth="4"></p-progressSpinner>
+    </div>
+
+    <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="submit()" class="form">
+      <div class="grid">
+        <div class="field">
+          <label for="documentType">Tipo de documento *</label>
+          <p-dropdown
+            inputId="documentType"
+            formControlName="documentType"
+            [options]="documentTypes"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Seleccione"
+            styleClass="w-full"
+            [style]="{ width: '100%' }"
+          ></p-dropdown>
+          <small class="p-error" *ngIf="form.controls.documentType.invalid && form.controls.documentType.touched">
+            Obligatorio
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="documentNumber">Número de documento *</label>
+          <input pInputText id="documentNumber" formControlName="documentNumber" class="w-full" />
+          <small class="p-error" *ngIf="form.controls.documentNumber.invalid && form.controls.documentNumber.touched">
+            Obligatorio
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="firstName">Nombre *</label>
+          <input pInputText id="firstName" formControlName="firstName" class="w-full" />
+          <small class="p-error" *ngIf="form.controls.firstName.invalid && form.controls.firstName.touched">
+            Obligatorio
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="lastName">Apellidos *</label>
+          <input pInputText id="lastName" formControlName="lastName" class="w-full" />
+          <small class="p-error" *ngIf="form.controls.lastName.invalid && form.controls.lastName.touched">
+            Obligatorio
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="birthDate">Fecha de nacimiento *</label>
+          <p-calendar
+            inputId="birthDate"
+            formControlName="birthDate"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            appendTo="body"
+            styleClass="w-full"
+          ></p-calendar>
+          <small class="p-error" *ngIf="form.controls.birthDate.invalid && form.controls.birthDate.touched">
+            Obligatorio
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="phoneNumber">Teléfono</label>
+          <input pInputText id="phoneNumber" formControlName="phoneNumber" class="w-full" />
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input pInputText id="email" type="email" formControlName="email" class="w-full" />
+          <small class="p-error" *ngIf="form.controls.email.invalid && form.controls.email.touched">
+            Email no válido
+          </small>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button pButton type="button" label="Cancelar" class="p-button-text" (click)="cancel()"></button>
+        <button
+          pButton
+          type="submit"
+          label="Guardar"
+          icon="pi pi-check"
+          [loading]="saving"
+          [disabled]="saving"
+        ></button>
+      </div>
+    </form>
+  </p-card>
+</div>

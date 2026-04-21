@@ -1,0 +1,32 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--surface-border, #e2e8f0);
+  background: var(--surface-card, #fff);
+}
+
+.shell__brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.shell__header ::ng-deep .p-menubar {
+  border: none;
+  background: transparent;
+  padding: 0;
+  flex: 1;
+}
+
+.shell__main {
+  flex: 1;
+  background: var(--surface-ground, #f8fafc);
+}

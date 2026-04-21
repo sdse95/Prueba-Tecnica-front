@@ -1,0 +1,43 @@
+.page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.5rem 1rem;
+  margin: 0;
+}
+
+.detail-grid dt {
+  font-weight: 600;
+  color: var(--text-color-secondary, #64748b);
+}
+
+.detail-grid dd {
+  margin: 0;
+}
+
+.hint {
+  color: var(--text-color-secondary, #64748b);
+  margin-bottom: 1rem;
+}
+
+.mt-3 {
+  margin-top: 1rem;
+}
